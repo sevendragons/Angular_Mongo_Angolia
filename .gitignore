@@ -1,0 +1,14 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+client-side/node_modules
+server/node_modules
+
+server/package-lock.json
+server/package-lock.json
+
+# testing
+client-side/coverage
+
+# production
+client-side/build
