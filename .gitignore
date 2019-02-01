@@ -5,7 +5,7 @@ client-side/AngularAmano/node_modules
 server/node_modules
 
 server/package-lock.json
-server/package-lock.json
+client-side/AngularAmano/package-lock.json
 
 # testing
 client-side/AngularAmano/coverage
