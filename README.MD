@@ -1,7 +1,7 @@
-#Amazone Web-app
+# Amazone Web-app
 
-##Front-end: Angular
+## Front-end: Angular
 
-##: Back-end: mongoDB, express, bodyparser, cors, morgan...
+## : Back-end: mongoDB, express, bodyparser, cors, morgan...
 
 ## Search tools: Angolia
