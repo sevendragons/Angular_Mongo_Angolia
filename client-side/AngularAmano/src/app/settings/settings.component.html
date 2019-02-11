@@ -1,0 +1,44 @@
+<section id="settings">
+  <div class="cotainer p-5">
+    <h4 class="display-4">My Account Settings</h4>
+    <hr>
+    <app-message></app-message>
+    <div class="m-auto" *ngIf="!currentSettings">
+      <h1 class="text-center display-3 mt-5">
+        <i class="fa fa-spinner fa-spin"></i>
+      </h1>
+    </div>
+    <div class="card bg-light" *ngIf="currentSettings">
+      <div class="card-body">
+        <a class="btn btn-warning" routerLink="/profile">Back to Profile</a>
+
+        <form>
+          <div class="form-group">
+            <label for="name" class="form-control-label">Name</label>
+            <input type="text" name="name" class="form-control" [(ngModel)]="currentSettings.name">
+          </div>
+          <div class="form-group">
+            <label for="email" class="form-control-label">Email</label>
+            <input type="text" name="email" class="form-control" [(ngModel)]="currentSettings.email">
+          </div>
+          <div class="form-group">
+            <label class="form-control-label">
+              <input type="checkbox" name="isSeller" class="form-control-input" [(ngModel)]="currentSettings.isSeller">Are you a seller?
+            </label>
+          </div>
+          <div class="form-group">
+            <label for="newPwd" class="form-control-label">New Password</label>
+            <input type="text" name="newPwd" class="form-control" [(ngModel)]="currentSettings.newPwd">
+          </div>
+          <div class="form-group">
+            <label for="pwdConfirm" class="form-control-label">Confirm Password</label>
+            <input type="text" name="pwdConfirm" class="form-control" [(ngModel)]="currentSettings.pwdConfirm">
+          </div>
+
+          <button type="button" class="btn btn-danger" (click)="update()" [disabled]="btnDisabled">Update</button>
+        </form>
+      </div>
+    </div>
+
+  </div>
+</section>
