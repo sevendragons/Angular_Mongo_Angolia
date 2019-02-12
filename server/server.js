@@ -4,8 +4,9 @@ const bodyParser = require ('body-parser');
 const mongoose = require ('mongoose');
 const cors = require ('cors');
 
-// const mainRoutes = require('./routes/main');
+const mainRoutes = require('./routes/main');
 const userRoutes = require('./routes/account');
+const sellerRoutes = require('./routes/seller');
 
 const app = express();
 
@@ -32,8 +33,9 @@ app.get('/', (req, res, next) => {
 app.use(morgan('dev'));
 app.use(cors());
 
-// app.use('/api', mainRoutes);
+app.use('/api', mainRoutes);
 app.use('/api/account', userRoutes);
+app.use('/api/seller', sellerRoutes);
 
 
 const port = process.env.PORT || 3030; //for Heroku

@@ -1,14 +1,14 @@
-// const router = require('express').Router();
-// const async = require('async');
+const router = require('express').Router();
+const async = require('async');
 // const stripe = require('stripe')('sk_test_JF4CoY7UAKFnkwzNgh1NtXDV');
 
 
-// const Category = require('../models/category');
-// const Product = require('../models/product');
+const Category = require('../models/category');
+const Product = require('../models/product');
 // const Review = require('../models/review');
 // const Order = require('../models/order');
 
-// const checkJWT = require('../middlewares/check-jwt');
+const checkJWT = require('../middlewares/check-jwt');
 
 // router.get('/products', (req, res, next) => {
 //     const perPage = 10;
@@ -46,75 +46,88 @@
 
 // });
 
-// router.route('/categories')
-//     .get((req, res, next) => {
-//         Category.find({}, (err, categories) => {
-//             res.json({
-//                 success: true,
-//                 message: "Success",
-//                 categories: categories
-//             })
-//         })
-//     })
-//     .post((req, res, next) => {
-//         let category = new Category();
-//         category.name = req.body.category;
-//         category.save();
-//         res.json({
-//             success: true,
-//             message: "Successful"
-//         });
-//     });
+router.route('/categories')
+  .get((req, res, next) => {
+    Category.find( {}, (err, categories) => {
+      res.json({
+        success: true,
+        message: "Success to get Categories &#x1F4E2; &#x1F643;",
+        categories: categories
+      });
+    } );
+  })
+  .post((req, res, next) => {
+    let category = new Category();
+    category.name = req.body.category;
+    category.save();
+    res.json({
+      success: true,
+      message: "Successfull Category Add &#x261D; &#x1F44D;"
+    });
+  });
 
+router.route('/categories/:id')
+ .get((req, res, next) => {
+    const perPage = 10;
+    const page = req.query.page;
+    async.parallel([
+        function (callback) {
+            Product.count({
+                category: req.params.id
+            }, (err, count) => {
+                var totalProducts = count;
+                callback(err, totalProducts);
+            });
+        },
+        function (callback) {
+            Product.find({
+                    category: req.params.id
+                })
+                .skip(perPage * page)
+                .limit(perPage)
+                .populate('category')
+                .populate('owner')
+                .populate('reviews')
+                .exec((err, products) => {
+                    if (err) return next(err);
+                    callback(err, products);
+                });
+        },
+        function (callback) {
+            Category.findOne({
+                _id: req.params.id
+            }, (err, category) => {
+                callback(err, category)
+            });
+        }
+    ], function (err, results) {
+        var totalProducts = results[0];
+        var products = results[1];
+        var category = results[2];
+        res.json({
+            success: true,
+            message: 'category',
+            products: products,
+            categoryName: category.name,
+            totalProducts: totalProducts,
+            pages: Math.ceil(totalProducts / perPage)
+        });
+    });
 
-// router.get('/categories/:id', (req, res, next) => {
-//     const perPage = 10;
-//     const page = req.query.page;
-//     async.parallel([
-//         function (callback) {
-//             Product.count({
-//                 category: req.params.id
-//             }, (err, count) => {
-//                 var totalProducts = count;
-//                 callback(err, totalProducts);
-//             });
-//         },
-//         function (callback) {
-//             Product.find({
-//                     category: req.params.id
-//                 })
-//                 .skip(perPage * page)
-//                 .limit(perPage)
-//                 .populate('category')
-//                 .populate('owner')
-//                 .populate('reviews')
-//                 .exec((err, products) => {
-//                     if (err) return next(err);
-//                     callback(err, products);
-//                 });
-//         },
-//         function (callback) {
-//             Category.findOne({
-//                 _id: req.params.id
-//             }, (err, category) => {
-//                 callback(err, category)
-//             });
-//         }
-//     ], function (err, results) {
-//         var totalProducts = results[0];
-//         var products = results[1];
-//         var category = results[2];
-//         res.json({
-//             success: true,
-//             message: 'category',
-//             products: products,
-//             categoryName: category.name,
-//             totalProducts: totalProducts,
-//             pages: Math.ceil(totalProducts / perPage)
-//         });
-//     });
+  })
+  .delete((res, req, next) => {
+    Category.findOne({_id: req.params.id})
+    .then(categories => {
+      const removeIndex = categories
+        .map(item => item.id)
+        indexOf(req.prams.id);
 
-// });
+      categories.splice(removeIndex, 1);
+
+      categories.save().then(categories => res.json(categories))
+    })
+    .catch(err => res.status(404).json(err))
+  });
 
 // router.get('/product/:id', (req, res, next) => {
 //     Product.findById({
@@ -210,4 +223,4 @@
 // });
 
 
-// module.exports = router;
+module.exports = router;
